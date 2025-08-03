@@ -19,6 +19,15 @@ const Shop = sequelize.define('Shop', {
   timestamps: true
 });
 
+// สร้างตารางถ้ายังไม่มี
+(async () => {
+  try {
+    await Shop.sync();
+    console.log('✅ Shops table synced');
+  } catch (err) {
+    console.error('❌ Shop.sync error:', err);
+  }
+})();
 
 router.post('/', tokenVerify, async (req, res) => {
   try {
