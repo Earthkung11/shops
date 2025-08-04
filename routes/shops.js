@@ -57,4 +57,28 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.put('/:id', tokenVerify, async (req, res) => {
+    try {
+        const shop = await Shop.findByPk(req.params.id);
+        if (!shop) return res.status(404).json({ message: 'ไม่พบร้านนี้' });
+
+        const { name, address } = req.body;
+        await shop.update({ name, address });
+        res.json({ message: 'แก้ไขร้านสำเร็จ', shop });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+
+router.delete('/:id', tokenVerify, async (req, res) => {
+    try {
+        const deletedCount = await Shop.destroy({ where: { id: req.params.id } });
+        if (!deletedCount) return res.status(404).json({ message: 'ไม่พบร้านนี้' });
+        res.json({ message: 'ลบร้านสำเร็จ' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;
